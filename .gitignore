@@ -1,0 +1,10 @@
+.databrickscfg
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+env/
+*.egg-info/
+evidence/*.png
+evidence/*.jpg
+.env
