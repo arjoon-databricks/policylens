@@ -18,6 +18,12 @@ ML = "policylens_ml"
 RAW_VOLUME = f"/Volumes/{CATALOG}/{BRONZE}/raw"
 EVIDENCE_DIR = f"{RAW_VOLUME}/_evidence"
 
+# ---- Lakebase (operational serving) ----
+LAKEBASE_INSTANCE = "policylens-oltp"
+LAKEBASE_DB = "databricks_postgres"
+LAKEBASE_SCHEMA = "policylens"
+LAKEBASE_HOST = "ep-falling-silence-d2mtzv14.database.us-east-1.cloud.databricks.com"
+
 PAYERS = ["EBCBS", "Competitor_A", "Competitor_B", "Competitor_C", "Competitor_D"]
 
 # Seeded gap policy ids (consistent across all tables / steps).
