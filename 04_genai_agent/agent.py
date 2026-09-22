@@ -28,13 +28,18 @@ import json, uuid, requests
 from openai import OpenAI
 from databricks.vector_search.client import VectorSearchClient
 
-CLAUDE_ENDPOINT = "databricks-claude-sonnet-5"
+# Route through the governed Unity Gateway MODEL SERVICE (UC securable
+# arjoon_ws_catalog.policylens_ml.policylens_copilot -> pay-per-token claude-sonnet-5).
+# The gateway adds rate limits + request/response audit logging to the inference table
+# arjoon_ws_catalog.policylens_ml.policylens_copilot_payload. Queried OpenAI-style at
+# {host}/ai-gateway/mlflow/v1 with the fully-qualified model-service name as `model`.
+CLAUDE_ENDPOINT = "arjoon_ws_catalog.policylens_ml.policylens_copilot"
 VS_ENDPOINT = "policylens-vs"
 VS_INDEX = f"{CATALOG}.{GOLD}.policy_documents_index"
 
 ctx = dbutils.notebook.entry_point.getDbutils().notebook().getContext()
 DBX_HOST = ctx.apiUrl().get(); DBX_TOKEN = ctx.apiToken().get()
-client = OpenAI(api_key=DBX_TOKEN, base_url=f"{DBX_HOST}/serving-endpoints")
+client = OpenAI(api_key=DBX_TOKEN, base_url=f"{DBX_HOST}/ai-gateway/mlflow/v1")
 vsc = VectorSearchClient(disable_notice=True)
 index = vsc.get_index(endpoint_name=VS_ENDPOINT, index_name=VS_INDEX)
 
