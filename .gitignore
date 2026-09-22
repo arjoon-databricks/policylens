@@ -8,3 +8,6 @@ env/
 evidence/*.png
 evidence/*.jpg
 .env
+
+# app deploy artifacts
+06_app/.databricks/
