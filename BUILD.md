@@ -80,3 +80,21 @@ This harness was validated on a trivial notebook before scaling to the 2M-row ge
 | Claude Sonnet 5 rejects the `temperature` param | Removed it; raised `max_tokens` so extended-thinking leaves room for the answer |
 | Genie `serialized_space` API is a string-typed object, `tables` must be sorted | Discovered the schema from a populated space; created the space via the REST API with sorted `data_sources.tables` |
 | GitHub repo is **public** and push identity lacked access | Kept EBCBS/synthetic discipline; authenticated the owning GitHub account for push |
+
+## Code review pass (Isaac Review)
+
+A deeper review of the full branch surfaced 7 findings; all were addressed:
+
+| # | Finding | Resolution |
+|---|---|---|
+| 1 | Lakebase load feeds numpy scalars to psycopg2 | Hardened `load_df` to convert via `.item()` (did not reproduce — original load succeeded — but robust across psycopg2 versions) |
+| 2 | App delta-fallback `list_cases` cached 5 min after write | `D.run_query.clear()` after the fallback insert; app redeployed (Lakebase primary path was unaffected) |
+| 3 | claims `prior_auth_id` format ≠ `fact_prior_auth.pa_id` | Generator now mints `PA-<8d>` in the PA id space. **No functional impact** (nothing joins on it); deployed data predates the fix (not regenerated) |
+| 4 | Simulator `float(None)` on a no-prediction CPT | Guarded with `pd.notna(...)`; app redeployed |
+| 5 | Agent reasoning-only turn dropped the assistant message | Append the assistant turn before the follow-up nudge; agent re-run verified (3 grounded recs + guardrail hold) |
+| 6 | `more_permissive` severity CASE was dead code | Tier `high` at ≥4 exclusive CPTs (WHERE keeps ≥3); gold re-run |
+| 7 | `29882` listed as knee-exclusive but covered by 2 competitors | Corrected to the 4 truly-exclusive codes + comment; matches the computed `n_exclusive_cpts` (no regen) |
+
+Notes: findings #3 and #7 are code/accuracy fixes with no functional impact and were not worth regenerating
+2M rows; the deployed silver data reflects the pre-fix values (documented here). The app was redeployed
+(deployment `01f1b61f6c1e1d8bbe0f7ae283124b6b`, RUNNING) and the agent re-verified after the fixes.

@@ -104,7 +104,8 @@ JOIN arjoon_ws_catalog.policylens_silver.silver_cpt_code c USING (cpt_code);
 -- ============================================================================
 CREATE OR REPLACE TABLE arjoon_ws_catalog.policylens_gold.policy_gap_alerts AS
 SELECT policy_id, policy_name, 'more_permissive' AS gap_type,
-       CASE WHEN n_exclusive_cpts >= 3 THEN 'high' ELSE 'medium' END AS severity,
+       -- WHERE below already requires >= 3 exclusive; tier high at >= 4 so severity is meaningful
+       CASE WHEN n_exclusive_cpts >= 4 THEN 'high' ELSE 'medium' END AS severity,
        CONCAT('EBCBS covers ', n_exclusive_cpts, ' CPT code(s) that fewer than 2 of ',
               n_competitors, ' competitors cover, and prior authorization is not required.') AS description,
        CAST(n_exclusive_cpts AS DOUBLE) AS detail_metric

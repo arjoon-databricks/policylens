@@ -148,7 +148,7 @@ KNEE_COMPETITOR_COVERAGE = {
     "Competitor_C": ["29880", "29881", "27447"],
     "Competitor_D": KNEE,
 }
-KNEE_EBCBS_EXCLUSIVE = ["29883", "29866", "29867", "29868", "29882"]  # 5 codes 3/4 competitors exclude
+KNEE_EBCBS_EXCLUSIVE = ["29883", "29866", "29867", "29868"]  # 4 codes only 1/4 competitors (D) cover -> 3/4 exclude
 
 VAGUE_KNEE = ("Arthroscopic knee procedures, including debridement and chondroplasty, may be considered "
               "medically necessary when the treating physician deems it appropriate. Prior authorization is not required.")
@@ -296,9 +296,10 @@ def gen_month(period, n):
     policy_ids = np.array([cpt_to_policy.get(c) for c in codes], dtype=object)
     # prior_auth_id only where the governing EBCBS policy requires PA
     pa_needed = np.isin(codes, ebcbs_pa_cpts)
+    # reference the fact_prior_auth id space/format ("PA-<8d>", 0..N_PA) so the columns can join
     pa_ids = np.where(
         pa_needed & (rng.random(n) < 0.9),
-        np.array(["PA%08d" % i for i in rng.integers(0, 5_000_000, n)], dtype=object),
+        np.array(["PA-%08d" % i for i in rng.integers(0, 40_000, n)], dtype=object),
         None,
     )
     ym = str(period)

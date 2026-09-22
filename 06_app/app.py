@@ -232,7 +232,7 @@ with t4:
             change = cc[2].selectbox("Change", ["remove", "add"], key="sim_chg")
             if st.button("Simulate impact", type="primary"):
                 res = D.simulate_financial_impact(pid, change, cpt)
-                if len(res):
+                if len(res) and pd.notna(res.iloc[0]["predicted_annual_allowed"]):
                     r = res.iloc[0]
                     impact = float(r["estimated_impact"])
                     pred = float(r["predicted_annual_allowed"])

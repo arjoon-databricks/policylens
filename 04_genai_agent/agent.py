@@ -170,7 +170,8 @@ def run_agent(user_msg, max_turns=6):
             txt = _text(m.content)
             if txt.strip():
                 return txt, trace
-            # reasoning-only turn: force a final text summary without tools
+            # reasoning-only turn: keep the assistant turn (preserve role alternation), then nudge
+            msgs.append({"role": "assistant", "content": txt or "(thinking)"})
             msgs.append({"role": "user", "content": "Now give your final recommendation as plain text."})
             continue
         msgs.append({"role": "assistant", "content": _text(m.content), "tool_calls": [

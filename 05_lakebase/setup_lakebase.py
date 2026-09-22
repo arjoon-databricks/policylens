@@ -62,10 +62,16 @@ rep.kv("database.schema", f"{PG_DB}.{PG_SCHEMA}")
 
 # COMMAND ----------
 
+def _py(v):
+    """Convert numpy scalars (int64/bool_/float64) to Python natives for psycopg2."""
+    if pd_isna(v):
+        return None
+    return v.item() if hasattr(v, "item") else v
+
 def load_df(pdf, table, ddl, cols):
     cur.execute(f"DROP TABLE IF EXISTS {PG_SCHEMA}.{table} CASCADE")
     cur.execute(ddl)
-    rows = [tuple(None if pd_isna(r[c]) else r[c] for c in cols) for _, r in pdf.iterrows()]
+    rows = [tuple(_py(r[c]) for c in cols) for _, r in pdf.iterrows()]
     execute_values(cur, f"INSERT INTO {PG_SCHEMA}.{table} ({', '.join(cols)}) VALUES %s", rows)
     return len(rows)
 

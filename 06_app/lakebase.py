@@ -129,4 +129,9 @@ class ReviewStore:
                 VALUES ({q(case_id)},{q(policy_id)},{q(gap_type)},{q(status)},
                         {q(assigned_analyst)},{q(rec)},{q(fin)}, TIMESTAMP {q(now)})
             """)
+            # invalidate the cached list_cases query so the new case shows immediately
+            try:
+                D.run_query.clear()
+            except Exception:  # noqa: BLE001
+                pass
         return case_id
