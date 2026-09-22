@@ -1,0 +1,13 @@
+.databrickscfg
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+env/
+*.egg-info/
+evidence/*.png
+evidence/*.jpg
+.env
+
+# app deploy artifacts
+06_app/.databricks/
