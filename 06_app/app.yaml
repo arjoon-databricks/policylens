@@ -15,3 +15,16 @@ command:
 env:
   - name: "DATABRICKS_WAREHOUSE_ID"
     valueFrom: "sql-warehouse"
+  # Pin an explicit LIGHT high-contrast theme so native widgets (incl. the
+  # canvas-rendered st.dataframe) are dark-on-light regardless of the runtime
+  # default. Env vars override .streamlit/config.toml and are always present.
+  - name: "STREAMLIT_THEME_BASE"
+    value: "light"
+  - name: "STREAMLIT_THEME_BACKGROUND_COLOR"
+    value: "#F4F7FB"
+  - name: "STREAMLIT_THEME_SECONDARY_BACKGROUND_COLOR"
+    value: "#FFFFFF"
+  - name: "STREAMLIT_THEME_TEXT_COLOR"
+    value: "#0B2545"
+  - name: "STREAMLIT_THEME_PRIMARY_COLOR"
+    value: "#0057B8"

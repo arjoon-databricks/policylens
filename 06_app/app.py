@@ -23,8 +23,35 @@ ACCENT = "#00A3E0"
 INK = "#0B2545"
 st.markdown(f"""
 <style>
-  .stApp {{ background:#F4F7FB; }}
+  .stApp {{ background:#F4F7FB; color:{INK}; }}
   #MainMenu, footer {{ visibility:hidden; }}
+  /* --- high-contrast hardening: dark ink on light everywhere by default --- */
+  .stApp, .stApp p, .stApp li, .stApp label,
+  [data-testid="stMarkdownContainer"], [data-testid="stMarkdownContainer"] p,
+  [data-testid="stMarkdownContainer"] li,
+  [data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p,
+  [data-testid="stHeader"] {{ color:{INK}; }}
+  .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {{ color:{INK}; }}
+  /* captions / help text a touch lighter but still AA on #F4F7FB */
+  [data-testid="stCaptionContainer"], .stApp small,
+  [data-testid="stCaptionContainer"] p {{ color:#3B4A5E !important; }}
+  /* tab labels */
+  .stTabs [data-baseweb="tab"] {{ color:{INK} !important; }}
+  .stTabs [data-baseweb="tab"][aria-selected="true"] {{ color:{PRIMARY} !important; }}
+  /* metrics */
+  [data-testid="stMetricLabel"], [data-testid="stMetricLabel"] p {{ color:#3B4A5E !important; }}
+  [data-testid="stMetricValue"] {{ color:{INK} !important; }}
+  /* inputs / selects: dark text on white fields */
+  .stApp input, .stApp textarea,
+  [data-baseweb="select"] div, [data-baseweb="input"] input,
+  [data-testid="stTextInput"] input, [data-testid="stTextArea"] textarea {{ color:{INK} !important; }}
+  [data-baseweb="select"] {{ background:#fff; }}
+  /* dataframe (DOM fallback if not canvas): dark cells on white */
+  [data-testid="stDataFrame"] * {{ color:{INK}; }}
+  /* expander + alert bodies */
+  [data-testid="stExpander"] p, [data-testid="stExpander"] summary {{ color:{INK}; }}
+  /* keep hero + pills readable (they define their own colors) */
+  .pl-hero, .pl-hero * {{ color:#fff !important; }}
   .pl-hero {{
      background:linear-gradient(120deg,{INK} 0%,{PRIMARY} 55%,{ACCENT} 130%);
      padding:22px 30px; border-radius:16px; color:#fff; margin-bottom:6px;
@@ -37,7 +64,7 @@ st.markdown(f"""
      box-shadow:0 2px 10px rgba(11,37,69,.05); height:100%; }}
   .kpi .lbl {{ font-size:12px; color:#5B6B7F; font-weight:600; text-transform:uppercase; letter-spacing:.4px; }}
   .kpi .now {{ font-size:30px; font-weight:800; color:{PRIMARY}; line-height:1.05; margin-top:6px; }}
-  .kpi .was {{ font-size:12px; color:#8A97A8; margin-top:4px; }}
+  .kpi .was {{ font-size:12px; color:#5B6B7F; margin-top:4px; }}
   .kpi .tag {{ font-size:11px; color:#0A8A5F; font-weight:700; margin-top:8px; }}
   .card {{ background:#fff; border:1px solid #E4EBF3; border-radius:14px; padding:18px 20px;
      box-shadow:0 2px 10px rgba(11,37,69,.05); margin-bottom:14px; }}
